@@ -2,8 +2,8 @@ import React from 'react'
 
 const Header = ({title}) => {
   return (
-    <header>
-        <h1 className="text-center text-bg-success p-2">{title}</h1>
+    <header className='position-sticky top-0 text-bg-success d-flex justify-content-center align-items-center'>
+      <h1>{title}</h1>
     </header>
   )
 }

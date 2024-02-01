@@ -1,10 +1,26 @@
-#note textarea{
+.note textarea,
+.note textarea:focus{
     background-image: url("./images/img2.jpg");
     background-size: cover;
-    height: 480px;
-    padding-top: 40px;
+    height: 470px;
     padding: 40px 30px 20px;
-    line-height:30px;
+    line-height: 31px;
     resize: none;
     overflow: hidden;
+    color: white;
+}
+.note input,
+.note input:focus{
+    background-image: url("./images/img2.jpg");
+    background-size: cover;
+    background-position: 0% 105%;
+    color: white;
+    font-size: 2.5rem;
+}
+header{
+    height: 60px;
+    z-index: 99;
+}
+main{
+    min-height: calc(100vh - 60px);
 }

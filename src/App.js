@@ -2,35 +2,51 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Main from './Main';
-import {Link, Route, Routes} from "react-router-dom"
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom"
 import Notes from './Notes';
+import NewNote from './NewNote';
 
 function App() {
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      title: "First Note",
-      body: "First This class applies the transformations translateX(-50%) and translateY(-50%) to the element which, in combination with the edge positioning utilities, allows you to absolute center an element."
-    },
-    {
-      id: 2,
-      title: "Second Note",
-      body: "Second This class applies the transformation sapplies the transformations translateX(-50%) and translateY(-50%) to the element which, in combination with the edge positioning utilities, allows you to absolute center an element."
-    },
-    {
-      id: 3,
-      title: "Third Note",
-      body: "Third This class applies the applies the transformations translateX(-50%) and translateY(-50%) to the element which, in combination with the edge positioning utilities, allows you to absolute center an element."
-    },
-    {
-      id: 4,
-      title: "Fourth Note",
-      body: "Fourth This class  transformations translateX(-50%) and translateY(-50%) to the element which, and translateY(-50%) to the element which, in combination with the edge positioning utilities, allows you to absolute center an element."
-    }
-  ])
+  const [notes, setNotes] = useState([])
+  const [editTitle, setEditTitle] = useState('')
+  const [editBody, setEditBody] = useState('')
 
+  const [newTitle, setNewTitle] = useState('')
+  const [newBody, setNewBody] = useState('')
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    setNotes(JSON.parse(localStorage.getItem("notes")) || [])
+  },[])
+
+  const handleEdit = (id) => {
+    const edited = {id, title:editTitle, body: editBody}
+    const newNotes = notes.map(note => note.id === id ? edited : note)
+    setNotes(newNotes)
+    localStorage.setItem("notes",JSON.stringify(newNotes))
+    setTimeout(() => {
+      navigate("/")
+    }, 0);
+  }
+
+  const handleAddNew = () =>{
+    const id = notes.length ? notes.length + 1 : 1
+    const newN = {id, title: newTitle, body: newBody}
+    const newNotes = [...notes, newN]
+    setNotes(newNotes)
+    localStorage.setItem("notes",JSON.stringify(newNotes))
+    setNewTitle('')
+    setNewBody('')
+    setTimeout(() => {
+      navigate("/")
+    }, 0);
+  }
+  
   const handleDelete = (id) =>{
-
+    const newNotes = notes.filter(note => note.id !== id)
+    setNotes(newNotes)
+    localStorage.setItem("notes",JSON.stringify(newNotes))
   }
 
   return (
@@ -46,6 +62,21 @@ function App() {
           <Route path='/notes/:id' element={
             <Notes 
               notes={notes}
+              handleEdit={handleEdit}
+              editTitle={editTitle}
+              handleDelete={handleDelete}
+              setEditTitle={setEditTitle}
+              editBody={editBody}
+              setEditBody={setEditBody}
+            />
+          } />
+          <Route path='/newnote' element={
+            <NewNote 
+              newTitle={newTitle}
+              setNewTitle={setNewTitle}
+              newBody={newBody}
+              setNewBody={setNewBody}
+              handleAddNew={handleAddNew}
             />
           } />
         </Routes>
